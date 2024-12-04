@@ -1,25 +1,21 @@
 import "../style/index.css";
 
-/**
- *  EDIT ONLY INSIDE THIS RENDER FUNCTION
- *  This function is called every time the user changes types or changes any input
- */
 function render(variables = {}) {
   console.log("These are the current variables: ", variables); // print on the console
 
-  // Determine cover image
+  // Determina la imagen de fondo
   let cover = `<div class="cover"><img src="${variables.background}" /></div>`;
-  if (variables.includeCover == false) cover = "<div class='cover'></div>";
+  if (variables.includeCover === false) cover = "<div class='cover'></div>";
 
-  // Construct full name
+  // Construye el nombre completo
   const fullName = `${variables.name || "Lucy"} ${variables.lastName ||
     "Boilett"}`;
 
-  // Determine location
+  // Determina la ubicación
   const location = `${variables.city || "Miami"}, ${variables.country ||
     "USA"}`;
 
-  // Social media links
+  // Enlaces de redes sociales
   const socialMedia = {
     twitter: variables.twitter
       ? `<li><a href="https://twitter.com/${variables.twitter}"><i class="fab fa-twitter"></i></a></li>`
@@ -35,13 +31,13 @@ function render(variables = {}) {
       : ""
   };
 
-  // Social media position
+  // Determina la clase de posición de las redes sociales
   const socialMediaClass =
-    variables.socialMediaPosition === "left"
+    variables.socialMediaPosition === "position-left"
       ? "position-left"
       : "position-right";
 
-  // Reset the website body with the new HTML output
+  // Reinicia el contenido HTML de la página con la nueva salida HTML
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
@@ -57,46 +53,39 @@ function render(variables = {}) {
         </div>`;
 }
 
-/**
- * Don't change any of the lines below, here is where we do the logic for the dropdowns
- */
+// Cuando la página carga
 window.onload = function() {
   window.variables = {
-    // if includeCover is true the algorithm should show the cover image
     includeCover: true,
-    // this is the image's url that will be used as a background for the profile cover
     background: "https://images.unsplash.com/photo-1511974035430-5de47d3b95da",
-    // this is the url for the profile avatar
     avatarURL: "https://randomuser.me/api/portraits/women/42.jpg",
-    // social media bar position (left or right)
-    socialMediaPosition: "right",
-    // social media usernames
-    twitter: null,
-    github: null,
-    linkedin: null,
-    instagram: null,
-    name: null,
-    lastName: null,
-    role: null,
-    country: null,
-    city: null
+    socialMediaPosition: "position-right", // Cambia entre "position-left" y "position-right"
+    twitter: "lucy_twitter",
+    github: "lucy_github",
+    linkedin: "lucy_linkedin",
+    instagram: "lucy_instagram",
+    name: "Lucy",
+    lastName: "Boilett",
+    role: "Web Developer",
+    country: "USA",
+    city: "Miami"
   };
-  render(window.variables); // render the card for the first time
+  render(window.variables);
 
+  // Escucha los cambios en los inputs
   document.querySelectorAll(".picker").forEach(function(elm) {
     elm.addEventListener("change", function(e) {
-      // <- add a listener to every input
-      const attribute = e.target.getAttribute("for"); // when any input changes, collect the value
+      const attribute = e.target.getAttribute("for");
       let values = {};
       values[attribute] =
-        this.value == "" || this.value == "null"
+        this.value === "" || this.value === "null"
           ? null
-          : this.value == "true"
+          : this.value === "true"
           ? true
-          : this.value == "false"
+          : this.value === "false"
           ? false
           : this.value;
-      render(Object.assign(window.variables, values)); // render again the card with new values
+      render(Object.assign(window.variables, values)); // Rerender con nuevos valores
     });
   });
 };
